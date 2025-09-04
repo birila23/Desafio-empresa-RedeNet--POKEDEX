@@ -68,3 +68,18 @@ main {
 #pokedex-list .pokemon-card {
   margin-bottom: 10px;
 }
+
+#btn-sair {
+  margin-left: 10px;
+  padding: 5px 12px;
+  border: none;
+  border-radius: 5px;
+  background: #c62828;
+  color: white;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+#btn-sair:hover {
+  background: #b71c1c;
+}
