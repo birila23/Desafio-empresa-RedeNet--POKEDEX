@@ -1,0 +1,70 @@
+* {
+    margin:0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-image: url(../img/bg-1.jpg);
+    background-size: cover;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+header {
+  background: #30751f;
+  color: white;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+main {
+  flex: 1;
+  display: flex;
+}
+
+#explorar {
+  flex: 3;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+#explorar input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 15px;
+}
+
+#pokemon-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
+}
+
+.pokemon-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  text-align: center;
+  padding: 10px;
+  background: #f8f8f8;
+}
+
+.pokemon-card img {
+  width: 80px;
+  height: 80px;
+}
+
+#minha-pokedex {
+  flex: 1;
+  background: #f0f0f0;
+  padding: 20px;
+  border-left: 2px solid #ddd;
+  overflow-y: auto;
+}
+
+#pokedex-list .pokemon-card {
+  margin-bottom: 10px;
+}

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Minha Pokédex</title>
+  <link rel="stylesheet" href="pokedex.css">
+</head>
+<body>
+  <header>
+    <h1>Pokédex</h1>
+    <div id="user-info">Logado como: <span id="user-name"></span></div>
+  </header>
+
+  <main>
+    <!-- Área central -->
+    <section id="explorar">
+      <h2>Explorar Pokémons</h2>
+      <input type="text" id="search" placeholder="Pesquisar Pokémon...">
+      <div id="pokemon-list" class="grid"></div>
+    </section>
+
+    <!-- Lateral direita -->
+    <aside id="minha-pokedex">
+      <h2>Minha Pokédex</h2>
+      <div id="pokedex-list"></div>
+    </aside>
+  </main>
+
+  <script src="js/app.js"></script>
+  <script src="pokedex.js"></script>
+</body>
+</html>
