@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import { PrismaClient } from '../../../generated/prisma';
+import { PrismaClient } from "@prisma/client";
 import { createUserSchema, loginSchema} from '../validations/userValidation';
 import { parse } from 'path';
 
@@ -23,8 +22,11 @@ export const createUser = async (req: Request, res: Response) =>{
             name: data.name,
             email: data.email,
             password: passwordHash,
+            pokedex: { create: {} }
         },
-    });
+        include: { pokedex: true },
+        });
+        
 
     return res.status(201).json({ message: "Usuário criado com sucesso", user: newUser });
 
@@ -92,7 +94,7 @@ export const login = async(req: Request, res:Response)=> {
     if (!validPassword) {
       return res.status(401).json({ message: "Senha inválida" });
     }
-    const token = jwt.sign({ userId: user.id, email: user.email }, process.env.JWT_SECRET as string, { expiresIn: '1d' });
+
     // retorna usuário sem senha
     return res.status(200).json({
       message: "Login realizado com sucesso",
@@ -101,7 +103,6 @@ export const login = async(req: Request, res:Response)=> {
         name: user.name,
         email: user.email,
       },
-      token,
     });
 
 }catch (error) {
