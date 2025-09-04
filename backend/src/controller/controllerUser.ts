@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { PrismaClient } from '../../../generated/prisma';
-import { createUserSchema, } from '../validations/userValidation';
+import { createUserSchema, loginSchema} from '../validations/userValidation';
 import { parse } from 'path';
 
 const prisma = new PrismaClient();
@@ -10,28 +10,23 @@ const prisma = new PrismaClient();
 export const createUser = async (req: Request, res: Response) =>{
     try{
         const data = createUserSchema.parse(req.body);
-        const { name, email, password } = data;
 
-        const userExists = await prisma.user.findUnique({ where: { email } });
+        const userExists = await prisma.user.findUnique({ where: { email: data.email }});
+
         if(userExists) return res.status(400).json({message: 'Email já cadastrado!'});
 
-        const passwordHash = await bcrypt.hash(password, 10);
-
+        const passwordHash = await bcrypt.hash(data.password, 10);
 
         // Cria o usuário
-        const user = await prisma.user.create({
+        const newUser = await prisma.user.create({
         data: {
-            name,
-            email,
+            name: data.name,
+            email: data.email,
             password: passwordHash,
         },
     });
 
-    res.status(201).json({
-      id: user.id,
-      name: user.name,
-      email: user.email,
-    });
+    return res.status(201).json({ message: "Usuário criado com sucesso", user: newUser });
 
     } catch (error: any) {
     // Erros do Zod
@@ -64,7 +59,7 @@ export const getUsers = async (req: Request, res: Response) => {
 
 export const getUserById = async(req:Request, res:Response) =>{
     try{
-    const userId = Number(req.params.id);
+    const userId = req.params.id;
 
     const user = await prisma.user.findUnique({
       where: { id: userId },
@@ -84,4 +79,33 @@ export const getUserById = async(req:Request, res:Response) =>{
     console.error(error);
     res.status(500).json({ message: "Erro ao buscar usuário" });
     }
+}
+
+export const login = async(req: Request, res:Response)=> {
+    try{
+    const data = loginSchema.parse(req.body);
+    const user = await prisma.user.findUnique({ where: { email: data.email }});
+
+    if (!user) return res.status(404).json({ message: "Usuário não encontrado" });
+
+    const validPassword = await bcrypt.compare(data.password, user.password);
+    if (!validPassword) {
+      return res.status(401).json({ message: "Senha inválida" });
+    }
+    const token = jwt.sign({ userId: user.id, email: user.email }, process.env.JWT_SECRET as string, { expiresIn: '1d' });
+    // retorna usuário sem senha
+    return res.status(200).json({
+      message: "Login realizado com sucesso",
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      },
+      token,
+    });
+
+}catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Erro ao buscar usuário" });
+}
 }
