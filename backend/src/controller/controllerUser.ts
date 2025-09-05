@@ -26,9 +26,7 @@ export const createUser = async (req: Request, res: Response) =>{
         },
         include: { pokedex: true },
         });
-        
-
-    return res.status(201).json({ message: "Usuário criado com sucesso", user: newUser });
+    res.status(201).json({ message: "Usuário criado com sucesso", user: newUser });
 
     } catch (error: any) {
     // Erros do Zod
@@ -40,47 +38,6 @@ export const createUser = async (req: Request, res: Response) =>{
     res.status(500).json({ message: "Erro ao criar usuário" });
   }
 
-}
-
-export const getUsers = async (req: Request, res: Response) => {
-  try {
-    const users = await prisma.user.findMany({
-      select: {
-        id: true,
-        name: true,
-        email: true,
-      },
-    });
-
-    res.status(200).json(users);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Erro ao buscar usuários" });
-  }
-};
-
-export const getUserById = async(req:Request, res:Response) =>{
-    try{
-    const userId = req.params.id;
-
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-      },
-    });
-
-    if (!user) {
-      return res.status(404).json({ message: "Usuário não encontrado" });
-    }
-
-    res.status(200).json(user);
-    }catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Erro ao buscar usuário" });
-    }
 }
 
 export const login = async(req: Request, res:Response)=> {

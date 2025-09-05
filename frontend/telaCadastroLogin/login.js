@@ -19,7 +19,7 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
     localStorage.setItem("userName", data.user.name);
 
     alert(`Bem-vindo, ${data.user.name}!`);
-    window.location.href = "index.html"; // redireciona pra pokédex
+    window.location.href = "../telaPokedex/pokedex.html"; // redireciona pra pokédex
   } catch (err) {
     alert("E-mail ou senha inválidos!");
     console.error(err);
