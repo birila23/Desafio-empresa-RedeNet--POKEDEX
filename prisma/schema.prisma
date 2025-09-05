@@ -34,7 +34,7 @@ model Pokedex {
 
 model Pokemon {
   id      Int    @id @default(autoincrement())
-  codeAPI Int
+  codeAPI String
 
   pokedex   Pokedex @relation(fields: [pokedexId], references: [id])
   pokedexId Int

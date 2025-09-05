@@ -34,7 +34,6 @@ export const getPokedex = async(req: Request, res: Response) => {
             where: { userId },
             include: {pokemons: true},
         })
-
         if(!pokedex) return res.status(404).json({message: "Pokedex não encontrada"});
 
         res.json(pokedex.pokemons);
