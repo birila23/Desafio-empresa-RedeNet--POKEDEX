@@ -1,6 +1,12 @@
 const userId = localStorage.getItem("userId");
 const userName = localStorage.getItem("userName");
+const pesquisa = document.getElementById("search");
 document.getElementById("user-name").textContent = userName;
+
+const btnSair = document.getElementById("btn-sair");
+btnSair.addEventListener("click", () => {
+    window.location.href = "../telaCadastroLogin/login.html";
+})
 
 async function getPokemon(){
     const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=20");
@@ -83,6 +89,35 @@ async function removeFromPokedex(pokemonId) {
     alert("Pokémon removido!");
     userPokedex();
 }
+pesquisa.addEventListener("keypress", async(e) =>{
+    if (e.key === "Enter"){
+        const query = document.getElementById("search").value.toLowerCase().trim();
+        if (!query) return alert("Digite o nome ou ID de um Pokémon.");
+
+    try {
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${query}`);
+        if (!response.ok) throw new Error("Pokémon não encontrado.");
+
+        const pokeData = await response.json();
+
+        const container = document.getElementById("pokemon-list");
+        container.innerHTML = ""; // limpa a lista atual
+
+        const card = document.createElement("div");
+        card.classList.add("pokemon-card");
+        card.innerHTML = `
+            <img src="${pokeData.sprites.front_default}" alt="${pokeData.name}">
+            <p>${pokeData.name}</p>
+            <button onclick="addPokedex('${pokeData.id}', '${pokeData.name}')">Adicionar</button>
+            `;
+        container.appendChild(card);
+
+    } catch (err) {
+        alert("Pokémon não encontrado!");
+        console.error(err);
+    }
+    } 
+})
 
 // carregar pokemons e a pokedex ao abrir
 document.addEventListener("DOMContentLoaded", () => {
