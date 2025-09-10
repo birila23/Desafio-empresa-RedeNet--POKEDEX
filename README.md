@@ -1,4 +1,7 @@
 # Desafio-empresa-RedeNet--POKEDEX
+
+> Projeto desenvolvido por **Ana Beatriz Queiroz de Almeida** como parte do **desafio técnico para a vaga de estágio**.
+
 Desenvolvimento de uma aplicação web que simula uma pokédex, que utiliza como base a PokéApi.
 
 O backend é uma API REST desenvolvida em **Node.js/Express** com **TypeScript**, utilizando **Prisma ORM** e **PostgreSQL** como banco de dados.  
