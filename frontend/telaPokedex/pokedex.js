@@ -111,6 +111,7 @@ pesquisa.addEventListener("keypress", async(e) =>{
             <img src="${pokeData.sprites.front_default}" alt="${pokeData.name}">
             <p>${pokeData.name}</p>
             <button onclick="addPokedex('${pokeData.id}', '${pokeData.name}')">Adicionar</button>
+            <button onclick="openModal('${pokeData.id}')">Detalhes</button>
             `;
         container.appendChild(card);
 
