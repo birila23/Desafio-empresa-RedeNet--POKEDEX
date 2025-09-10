@@ -70,7 +70,7 @@ main {
 #pokedex-list .pokemon-card {
   margin-bottom: 10px;
 }
-
+/* botão sair da conta */
 #btn-sair {
   margin-left: 10px;
   padding: 5px 12px;
@@ -84,4 +84,31 @@ main {
 
 #btn-sair:hover {
   background: #b71c1c;
+}
+
+/*modal*/
+dialog {
+  position: fixed;         /* fixo na tela */
+  top: 50%;                /* meio vertical */
+  left: 50%;               /* meio horizontal */
+  transform: translate(-50%, -50%); /* centraliza */
+  border: none;
+  border-radius: 12px;
+  padding: 20px;
+  width: 350px;
+  max-width: 90%;
+  text-align: center;
+}
+
+/* fundo escuro */
+dialog::backdrop {
+  background: rgba(0,0,0,0.6);
+}
+
+/* botão fechar */
+.close {
+  position: absolute;
+  top: 10px; right: 15px;
+  font-size: 22px;
+  cursor: pointer;
 }

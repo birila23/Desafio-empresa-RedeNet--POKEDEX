@@ -24,6 +24,7 @@ async function getPokemon(){
         <img src="${pokeData.sprites.front_default}" alt="${pokeData.name}">
         <p>${pokeData.name}</p>
         <button onclick="addPokedex('${pokeData.id}', '${pokeData.name}')">Adicionar</button>
+        <button onclick="openModal('${pokeData.id}')">Detalhes</button>
         `;
         container.appendChild(card);
         console.log(card);
@@ -60,6 +61,7 @@ async function userPokedex() {
           <img src="${pokeData.sprites.front_default}" alt="${pokeData.name}">
           <h3>${pokeData.name}</h3>
           <button onclick="removeFromPokedex('${poke.id}')">Remover</button>
+          <button onclick="openModal('${pokeData.id}')">Detalhes</button>
         `;
         container.appendChild(card);
       } catch (err) {
@@ -118,6 +120,33 @@ pesquisa.addEventListener("keypress", async(e) =>{
     }
     } 
 })
+
+async function openModal(pokemonId) {
+  const modal = document.getElementById("pokemon-modal");
+  const modalBody = document.getElementById("modal-body");
+
+    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`);
+    if (!response.ok) throw new Error("Pokémon não encontrado.");
+
+    const pokeData = await response.json();
+
+    modalBody.innerHTML = `
+      <h2 style="text-transform: capitalize;">${pokeData.name}</h2>
+      <img src="${pokeData.sprites.front_default}" alt="${pokeData.name}">
+      <p><strong>ID:</strong> ${pokeData.id}</p>
+      <p><strong>Altura:</strong> ${pokeData.height}</p>
+      <p><strong>Peso:</strong> ${pokeData.weight}</p>
+      <p><strong>Tipos:</strong> ${pokeData.types.map(t => t.type.name).join(", ")}</p>
+    `;
+
+    modal.showModal(); // abre no centro
+
+    //fechar modal
+    document.getElementById("close-modal").onclick = () => {
+      document.getElementById("pokemon-modal").close();
+    };
+
+}
 
 // carregar pokemons e a pokedex ao abrir
 document.addEventListener("DOMContentLoaded", () => {
