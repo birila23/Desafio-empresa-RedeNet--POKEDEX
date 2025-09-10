@@ -38,6 +38,7 @@ main {
   width: 100%;
   padding: 8px;
   margin-bottom: 15px;
+  border-radius: 10px;
 }
 
 #pokemon-list {
