@@ -15,6 +15,7 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
     if (!response.ok) throw new Error(data.message || "Erro no login");
 
     // Salvar usuário logado
+    localStorage.setItem("token", data.token);
     localStorage.setItem("userId", data.user.id);
     localStorage.setItem("userName", data.user.name);
 

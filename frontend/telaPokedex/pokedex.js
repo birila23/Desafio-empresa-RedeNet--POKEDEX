@@ -1,10 +1,14 @@
 const userId = localStorage.getItem("userId");
+const token = localStorage.getItem("token");
 const userName = localStorage.getItem("userName");
 const pesquisa = document.getElementById("search");
 document.getElementById("user-name").textContent = userName;
 
 const btnSair = document.getElementById("btn-sair");
 btnSair.addEventListener("click", () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("userName");
     window.location.href = "../telaCadastroLogin/login.html";
 })
 
@@ -31,8 +35,16 @@ async function getPokemon(){
     }
 }
 async function userPokedex() {
-    const response = await fetch(`http://localhost:3333/pokedex/${userId}`);
-    if (!response.ok) throw new Error("Erro ao buscar Pokedex");
+    const response = await fetch(`http://localhost:3333/pokedex/${userId}`, {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+    });
+    if (!response.ok) {
+        alert("Você precisa estar logado!");
+        window.location.href = "../telaCadastroLogin/login.html";
+          return;
+    }
 
     const data = await response.json();
     console.log("Dados da Pokedex recebidos", data);
@@ -73,7 +85,10 @@ async function userPokedex() {
 async function addPokedex(pokemonId, name) {
   await fetch(`http://localhost:3333/pokedex/${userId}/add`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
     body: JSON.stringify({ codeAPI: pokemonId })
   });
 
@@ -83,7 +98,10 @@ async function addPokedex(pokemonId, name) {
 
 async function removeFromPokedex(pokemonId) {
     const response = await fetch(`http://localhost:3333/pokedex/${userId}/remove/${pokemonId}`, {
-      method: "DELETE"
+      method: "DELETE",
+      headers: {
+        "Authorization": `Bearer ${token}`
+      },
     });
 
     if (!response.ok) throw new Error("Erro ao remover Pokémon");
@@ -151,6 +169,11 @@ async function openModal(pokemonId) {
 
 // carregar pokemons e a pokedex ao abrir
 document.addEventListener("DOMContentLoaded", () => {
+  if (!token) {
+    alert("Faça login para acessar a Pokédex!");
+        window.location.href = "../telaCadastroLogin/login.html";
+    return;
+  }
   getPokemon();
   userPokedex();
 });

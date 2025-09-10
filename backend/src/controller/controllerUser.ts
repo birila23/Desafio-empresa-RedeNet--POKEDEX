@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import { PrismaClient } from "@prisma/client";
 import { createUserSchema, loginSchema} from '../validations/userValidation';
 import { parse } from 'path';
+import jwt from 'jsonwebtoken';
 
 const prisma = new PrismaClient();
 
@@ -26,7 +27,8 @@ export const createUser = async (req: Request, res: Response) =>{
         },
         include: { pokedex: true },
         });
-    res.status(201).json({ message: "Usuário criado com sucesso", user: newUser });
+
+        res.status(201).json({ message: "Usuário criado com sucesso", user: newUser });
 
     } catch (error: any) {
     // Erros do Zod
@@ -51,6 +53,7 @@ export const login = async(req: Request, res:Response)=> {
     if (!validPassword) {
       return res.status(401).json({ message: "Senha inválida" });
     }
+    const token = jwt.sign({ userId: user.id, email: user.email }, process.env.JWT_SECRET as string, { expiresIn: '1d' });
 
     // retorna usuário sem senha
     return res.status(200).json({
@@ -60,6 +63,7 @@ export const login = async(req: Request, res:Response)=> {
         name: user.name,
         email: user.email,
       },
+      token,
     });
 
 }catch (error) {

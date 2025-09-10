@@ -6,6 +6,13 @@ const prisma = new PrismaClient();
 export const addPokemonToPokedex = async(req: Request, res: Response) =>{
     try{
         const { userId } = req.params;
+        console.log("🔑 req.user:", req.user);
+        console.log("📌 userId param:", userId);
+        // garante que só o dono pode mexer
+        if (req.user?.userId !== userId) {
+            console.log("🚨 userId não bate!");
+            return res.status(403).json({ message: "Acesso negado" });
+        }
         const { codeAPI } = req.body;
 
         // Buscar a pokedex do usuário
